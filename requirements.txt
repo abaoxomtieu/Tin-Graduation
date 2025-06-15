@@ -1,5 +1,4 @@
-torch==2.3.0
--f https://download.pytorch.org/whl/cpu
+
 langgraph
 langchain
 langchain-community
@@ -24,4 +23,5 @@ langchain-text-splitters
 python-docx
 cloudinary
 PyJWT==2.8.0
-langchain_docling
+pymupdf 
+docx2txt

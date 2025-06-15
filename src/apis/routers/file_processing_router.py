@@ -1,8 +1,9 @@
 from fastapi import APIRouter, status, UploadFile, File
 from fastapi.responses import JSONResponse
 from src.utils.logger import logger
-
-from langchain_docling import DoclingLoader
+from langchain_community.document_loaders import PyMuPDFLoader
+from langchain_community.document_loaders import Docx2txtLoader
+from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import os
 import tempfile
@@ -11,6 +12,7 @@ import fitz
 from docx import Document as DocxDoc
 from src.config.vector_store import vector_store
 from pydantic import BaseModel, Field
+
 
 router = APIRouter(prefix="/file", tags=["File Processing"])
 
@@ -91,9 +93,17 @@ async def ingress_file(
         with open(temp_file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
-        loader = DoclingLoader(file_path=temp_file_path, export_type="markdown")
-        docs = loader.load()
+        # Loader phù hợp (KHÔNG dùng unstructured)
+        if file.filename.endswith(".pdf"):
+            loader = PyMuPDFLoader(temp_file_path)
+        elif file.filename.endswith(".docx"):
+            loader = Docx2txtLoader(temp_file_path)
+        elif file.filename.endswith(".txt"):
+            loader = TextLoader(temp_file_path)
+        else:
+            raise ValueError(f"Unsupported file format: {file.filename}")
 
+        docs = loader.load()
         splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         chunks = splitter.split_documents(docs)
 

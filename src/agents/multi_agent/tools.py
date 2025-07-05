@@ -21,25 +21,25 @@ def retrieve_document(query: str):
     Returns:
         str: Retrieved documents
     """
-    # retriever = vector_store.as_retriever(
-    #     search_type="similarity_score_threshold",
-    #     search_kwargs={"k": 5, "score_threshold": 0.3},
-    # )
-    # documents = retriever.invoke(query)
-    # selected_documents = [doc.__dict__ for doc in documents]
-    # selected_ids = [doc["id"] for doc in selected_documents]
-    # context_str = convert_list_context_source_to_str(documents)
+    retriever = vector_store.as_retriever(
+        search_type="similarity_score_threshold",
+        search_kwargs={"k": 5, "score_threshold": 0.3},
+    )
+    documents = retriever.invoke(query)
+    selected_documents = [doc.__dict__ for doc in documents]
+    selected_ids = [doc["id"] for doc in selected_documents]
+    context_str = convert_list_context_source_to_str(documents)
 
-    # return {
-    #     "context_str": context_str,
-    #     "selected_documents": selected_documents,
-    #     "selected_ids": selected_ids,
-    # }
+    return {
+        "context_str": context_str,
+        "selected_documents": selected_documents,
+        "selected_ids": selected_ids,
+    }
     return "Không có tài liệu liên quan"
 
 
 @tool
-def send_gmail(name: str, email: str, body: str):
+def send_gmail(name: str, body: str, config: RunnableConfig):
     """Công cụ gửi email
     Args:
         name (str): Tên của người dùng
@@ -48,5 +48,7 @@ def send_gmail(name: str, email: str, body: str):
     Returns:
         str: Thông báo thành công
     """
+    configuration = config.get("configurable", {})
+    email = configuration.get("email", None)
 
-    return f""
+    return f"Đã gửi email đến {email}"

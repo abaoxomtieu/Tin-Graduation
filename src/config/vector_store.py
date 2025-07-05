@@ -10,7 +10,7 @@ from langchain_core.vectorstores import VectorStore
 API_PINCONE_KEY = os.getenv("PINECONE_API_KEY")
 
 vector_store = PineconeVectorStore(
-    index_name="fpt-document",
+    index_name="ai-vector-db",
     embedding=embeddings,
     pinecone_api_key=API_PINCONE_KEY,
 )

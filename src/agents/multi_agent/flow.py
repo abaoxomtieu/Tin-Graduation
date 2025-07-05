@@ -8,8 +8,8 @@ from langgraph.checkpoint.memory import InMemorySaver
 
 # Handoffs
 
-admission_consultant_name = "ABAO"
-career_consultant_name = "ABEO"
+admission_consultant_name = "admission_consultant"
+career_consultant_name = "career_consultant"
 
 # Define agents
 admission_consultant_assistant = create_react_agent(
@@ -52,20 +52,3 @@ workflow = add_active_agent_router(
 )
 
 app = workflow.compile(checkpointer=checkpointer)
-config = {"configurable": {"thread_id": "1"}}
-
-
-# # Run the multi-agent graph
-# for chunk in app.stream(
-#     {
-#         "messages": [
-#             {
-#                 "role": "user",
-#                 "content": "Tôi muốn tư vấn về tuyển sinh",
-#             }
-#         ]
-#     },
-#     config=config,
-# ):
-#     print(chunk)
-#     print("\n")

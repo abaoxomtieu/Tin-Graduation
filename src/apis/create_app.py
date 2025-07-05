@@ -3,24 +3,26 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.apis.routers.rag_agent_template import router as router_rag_agent_template
 from src.apis.routers.file_processing_router import router as router_file_processing
 from src.apis.routers.vector_store_router import router as vector_store_router
+from src.apis.routers.multi_agent_template import router as router_multi_agent_template
 
 
 api_router = APIRouter()
 api_router.include_router(router_rag_agent_template)
 api_router.include_router(router_file_processing)
 api_router.include_router(vector_store_router)
+api_router.include_router(router_multi_agent_template)
 
 
 def create_app():
     app = FastAPI(
         docs_url="/docs",
-        title="AI Service ABAOXOMTIEU",
+        title="AI Service",
     )
 
     @app.get("/")
     def root():
         return {
-            "message": "Backend is running. I'm ABAOXOMTIEU",
+            "message": "Backend is running",
 
         }
 
